@@ -11,7 +11,7 @@ namespace ActiveRecordForAzure.Core.Tests {
                 .Setup(2);
                 //.With(x => x.ForeignKey).Returns("foreign");
                 
-            var entities = FakeEntity.Find(x => x.ForeignKey == "ForeignKey-2");
+            var entities = FakeEntity.Find(x => x.ForeignKey == "ForeignKey-2"); //default pattern is "[MemberName]-[N]"
 
             Assert.Equal(1, entities.Count());
 

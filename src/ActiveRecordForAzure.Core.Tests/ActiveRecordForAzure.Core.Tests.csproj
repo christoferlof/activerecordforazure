@@ -55,12 +55,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeEntity.cs" />
+    <Compile Include="FakeEntitySpecification.cs" />
     <Compile Include="find_multiple_entities.cs" />
     <Compile Include="initialize_context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="find_single_entity.cs" />
     <Compile Include="save_single_entity.cs" />
     <Compile Include="setup_for_test.cs" />
+    <Compile Include="setup_for_test_with_returns.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActiveRecordForAzure.Core\ActiveRecordForAzure.Core.csproj">

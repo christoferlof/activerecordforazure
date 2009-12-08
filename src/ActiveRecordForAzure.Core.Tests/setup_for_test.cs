@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit;
 
 namespace ActiveRecordForAzure.Core.Tests {
-    public class setup_for_test {
+    public class setup_for_test : FakeEntitySpecification {
 
         public setup_for_test() {
             FakeEntity.Setup(1);
@@ -11,20 +11,48 @@ namespace ActiveRecordForAzure.Core.Tests {
 
         [Fact]
         public void it_creates_the_specified_number_of_entity_instances() {
-
-            var actual = ActiveRecordContext.Current.CreateQuery<FakeEntity>().Count();
-
+            var actual = GetFakeEntities().Count();
             Assert.Equal(1, actual);
-
         }
 
         [Fact]
-        public void it_creates_entities_having_their_properties_set_to_defaults() {
+        public void it_initializes_non_specified_string_member_with_default() {
+            Assert.Equal("RowKey-1", FirstEntity().RowKey);
+        }
 
-            var entity = GetFakeEntities().FirstOrDefault();
+        [Fact]
+        public void it_initializes_non_specified_datetime_member_with_minvalue() {
+            Assert.Equal(DateTime.MinValue, FirstEntity().DateTimeValue);
+        }
 
-            Assert.Equal("ForeignKey-1", entity.ForeignKey); //[MemberName]-[Counter] for strings
+        [Fact]
+        public void it_initializes_non_specified_bool_member_with_false() {
+            Assert.Equal(false, FirstEntity().BoolValue);
+        }
 
+        [Fact]
+        public void it_initializes_non_specified_int_member_with_zero() {
+            Assert.Equal(0, FirstEntity().IntValue);
+        }
+
+        [Fact]
+        public void it_initializes_non_specified_long_member_with_zero() {
+            Assert.Equal(0, FirstEntity().LongValue);
+        }
+
+        [Fact]
+        public void it_initializes_non_specified_guid_member_with_empty() {
+            Assert.Equal(Guid.Empty, FirstEntity().GuidValue);
+        }
+
+        [Fact]
+        public void it_initializes_non_specified_double_member_with_zero() {
+            Assert.Equal(0.0, FirstEntity().DoubleValue);
+        }
+
+        [Fact]
+        public void it_initializes_non_specified_byte_member_with_null() {
+            Assert.Equal(null, FirstEntity().ByteValue);
         }
 
         [Fact]
@@ -45,10 +73,6 @@ namespace ActiveRecordForAzure.Core.Tests {
 
             Assert.Equal(setup, context.GetSetup<FakeEntity>());
 
-        }
-
-        private static IQueryable<FakeEntity> GetFakeEntities() {
-            return ActiveRecordContext.Current.CreateQuery<FakeEntity>();
         }
     }
 }

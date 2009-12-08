@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace ActiveRecordForAzure.Core {
     public class ActiveRecordTestContext : IActiveRecordContext  {
         
         public static ActiveRecordTestContext Initialize() {
-            if (ActiveRecordContext.Current == null) {
-                ActiveRecordContext.Initialize(new ActiveRecordTestContext());
-            }
+            
+            ActiveRecordContext.Initialize(new ActiveRecordTestContext());
+            
             return ActiveRecordContext.Current as ActiveRecordTestContext;
         }
 
@@ -56,18 +57,37 @@ namespace ActiveRecordForAzure.Core {
         }
 
         private void SetupEntity<TEntity>() where TEntity : new() {
+            
             var setup = _setups[GetKey<TEntity>()] as ActiveRecordTestSetup<TEntity>;
                     
             for(var i = 0; i<setup.NumberOfEntities;i++) {
                 var entity = new TEntity();
 
                 foreach (var member in entity.GetType().GetProperties()) {
-                    if (member.PropertyType == typeof(string)) {
-                        member.SetValue(entity, string.Format("{0}-{1}", member.Name, i + 1), null);
-                    }
+                    SetupMember(i, setup, entity, member);
                 }
 
                 AddEntityToList(entity);
+            }
+        }
+
+        private void SetupMember<TEntity>(int counter, ActiveRecordTestSetup<TEntity> setup, TEntity entity, PropertyInfo member) {
+            
+            //registered returns
+            var memberSetup = setup.Members.SingleOrDefault(m => m.Name == member.Name);
+                    
+            if(memberSetup != null) {
+                member.SetValue(entity,memberSetup.Value,null);
+            }
+            //defaults
+            else{
+                SetupDefaultMember(member, entity, counter);
+            }
+        }
+
+        private void SetupDefaultMember<TEntity>(PropertyInfo member, TEntity entity, int counter) {
+            if (member.PropertyType == typeof(string)) {
+                member.SetValue(entity, string.Format("{0}-{1}", member.Name, counter + 1), null);
             }
         }
 
