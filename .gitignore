@@ -1,8 +1,10 @@
-obj
-bin
-*.csproj.user
-*ReSharper*
-*resharper*
+*resharper.user
+[Dd]ebug/
+[Rr]elease/
+build/
+[Bb]in/
+[Oo]bj/
 *.suo
-*.cache
-Thumbs.db
+*.sln.cache
+_ReSharper.*/
+*.user
