@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit;
 
 namespace ActiveRecordForAzure.Core.Tests {
-    public class setup_for_test_with_returns : FakeEntitySpecification{
+    public class setup_for_test_with_returns : FakeEntitySpecification {
 
         private readonly Guid _guidValue;
 
@@ -12,6 +12,7 @@ namespace ActiveRecordForAzure.Core.Tests {
             _guidValue = Guid.NewGuid();
 
             FakeEntity.Setup(2)
+                .With(x => x.RowKey).Returns("id-{0}")
                 .With(x => x.Name).Returns("The Name")
                 .With(x => x.ByteValue).Returns(new byte[2])
                 .With(x => x.BoolValue).Returns(true)
@@ -24,12 +25,17 @@ namespace ActiveRecordForAzure.Core.Tests {
 
         [Fact]
         public void it_creates_the_specified_number_of_entities() {
-            Assert.Equal(2, GetFakeEntities().Count());   
+            Assert.Equal(2, GetFakeEntities().Count());
         }
 
         [Fact]
         public void it_initializes_specified_string_member() {
             Assert.Equal("The Name", FirstEntity().Name);
+        }
+
+        [Fact]
+        public void it_initializes_specified_string_member_with_tokens() {
+            Assert.Equal("id-1", FirstEntity().RowKey);
         }
 
         [Fact]
@@ -71,7 +77,7 @@ namespace ActiveRecordForAzure.Core.Tests {
         public void it_registers_member_and_value_with_setup() {
 
             var context = ActiveRecordContext.Current as ActiveRecordTestContext;
-            var memberSetup = context.GetSetup<FakeEntity>().Members[0];
+            var memberSetup = context.GetSetup<FakeEntity>().Members.Where(x => x.Name == "Name").FirstOrDefault();
 
             Assert.Equal("Name", memberSetup.Name);
             Assert.Equal("The Name", memberSetup.Value);

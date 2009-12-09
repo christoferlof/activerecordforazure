@@ -6,7 +6,10 @@ namespace ActiveRecordForAzure.Core.Tests {
         [Fact]
         public void returns_instance_when_found() {
 
-            var id = "id";
+            FakeEntity.Setup(2)
+                .With(x => x.RowKey).Returns("{0}");
+
+            var id = "1";
             var entity = FakeEntity.Find(id);
 
             Assert.Equal(id, entity.RowKey);
@@ -16,7 +19,10 @@ namespace ActiveRecordForAzure.Core.Tests {
         [Fact]
         public void returns_null_when_not_found() {
 
-            var id = string.Empty;
+            FakeEntity.Setup(1)
+                .With(x => x.RowKey).Returns("key");
+
+            var id = "fookey";
             var entity = FakeEntity.Find(id);
 
             Assert.Equal(null, entity);

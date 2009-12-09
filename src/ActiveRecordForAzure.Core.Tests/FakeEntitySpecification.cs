@@ -3,6 +3,10 @@
 namespace ActiveRecordForAzure.Core.Tests {
     public class FakeEntitySpecification {
         
+        protected FakeEntitySpecification() {
+            ActiveRecordTestContext.Initialize();
+        }
+
         protected static FakeEntity FirstEntity() {
             return GetFakeEntities().First();
         }
