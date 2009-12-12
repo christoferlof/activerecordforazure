@@ -36,6 +36,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.Services.Client">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -50,6 +53,8 @@
     <Compile Include="ActiveRecordContext.cs" />
     <Compile Include="ActiveRecordTestSetup.cs" />
     <Compile Include="IActiveRecordContext.cs" />
+    <Compile Include="Abstractions\ITableServiceContext.cs" />
+    <Compile Include="Abstractions\TableServiceContextWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ActiveRecordTestContext.cs" />
   </ItemGroup>

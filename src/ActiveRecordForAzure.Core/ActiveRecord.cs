@@ -14,7 +14,7 @@ namespace ActiveRecordForAzure.Core {
         /// <returns></returns>
         public static TEntity Find(string id) {
             if (!string.IsNullOrEmpty(id))
-                return Find(x => x.RowKey == id).FirstOrDefault();
+                return Find(x => x.RowKey == id).FirstOrDefault(); //TODO: PartitionKey
             return null;
         }
 

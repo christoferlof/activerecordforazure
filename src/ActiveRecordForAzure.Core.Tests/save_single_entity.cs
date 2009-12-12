@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using ActiveRecordForAzure.Core.Abstractions;
+using Moq;
 using Xunit;
 
 namespace ActiveRecordForAzure.Core.Tests {
