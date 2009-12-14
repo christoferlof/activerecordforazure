@@ -10,10 +10,13 @@ namespace ActiveRecordForAzure.Core {
 
         public ActiveRecordTestSetup(int numberOfEntities) {
             _numberOfEntities = numberOfEntities;
+            ActiveRecordTestContext.EnsureTestContext();
+            RegisterWithCurrentTestContext();
+        }
 
-            var context = ActiveRecordTestContext.Initialize();
+        private void RegisterWithCurrentTestContext() {
+            var context = ActiveRecordContext.Current as ActiveRecordTestContext;
             context.RegisterSetup(this);
-
         }
 
         public int NumberOfEntities {

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core {
+
     public class ActiveRecord<TEntity> : TableServiceEntity where TEntity : ActiveRecord<TEntity>, new() {
 
         /// <summary>

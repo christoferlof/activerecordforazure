@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using System;
 
 namespace ActiveRecordForAzure.Core.Tests {
     public class FakeEntitySpecification {
-        
-        protected FakeEntitySpecification() {
-            ActiveRecordTestContext.Initialize();
+
+        public FakeEntitySpecification() {
+            ActiveRecordTestContext.EnsureTestContext();
         }
 
         protected static FakeEntity FirstEntity() {

@@ -6,12 +6,10 @@ using System.Reflection;
 
 namespace ActiveRecordForAzure.Core {
     public class ActiveRecordTestContext : IActiveRecordContext  {
-        
-        public static ActiveRecordTestContext Initialize() {
-            
-            ActiveRecordContext.Initialize(new ActiveRecordTestContext());
-            
-            return ActiveRecordContext.Current as ActiveRecordTestContext;
+
+        public static void EnsureTestContext() {
+            //ActiveRecordContextFactory.RegisterFactory(() => new ActiveRecordTestContext());
+            ActiveRecordContext.Initialize(new ActiveRecordTestContext()); //force
         }
 
         private readonly Hashtable _entities = new Hashtable();
@@ -117,5 +115,6 @@ namespace ActiveRecordForAzure.Core {
             }
         }
 
+        
     }
 }
