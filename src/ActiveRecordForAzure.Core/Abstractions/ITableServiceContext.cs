@@ -7,6 +7,10 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core.Abstractions {
+
+    /// <summary>
+    /// Interface extracted from <see cref="TableServiceContext"/>
+    /// </summary>
     public interface ITableServiceContext {
         IAsyncResult BeginSaveChangesWithRetries(AsyncCallback callback, object state);
         IAsyncResult BeginSaveChangesWithRetries(SaveChangesOptions options, AsyncCallback callback, object state);

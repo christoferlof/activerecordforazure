@@ -5,8 +5,15 @@ using System.Linq;
 using System.Reflection;
 
 namespace ActiveRecordForAzure.Core {
+
+    /// <summary>
+    /// ActiveRecord Context used when stubbing
+    /// </summary>
     public class ActiveRecordTestContext : IActiveRecordContext  {
 
+        /// <summary>
+        /// Ensures the test context.
+        /// </summary>
         public static void EnsureTestContext() {
             ActiveRecordContextFactory.RegisterFactory(() => new ActiveRecordTestContext());
         }
@@ -14,16 +21,31 @@ namespace ActiveRecordForAzure.Core {
         private readonly Hashtable _entities = new Hashtable();
         private readonly Hashtable _setups = new Hashtable();
 
+        /// <summary>
+        /// Creates the query.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <returns></returns>
         public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
             EnsureEntityList<TEntity>();
             return GetList<TEntity>().AsQueryable();
         }
 
+        /// <summary>
+        /// Adds the entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="entity">The entity.</param>
         public void AddEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
             EnsureEntityList<TEntity>();
             AddEntityToList(entity);
         }
 
+        /// <summary>
+        /// Updates the entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="entity">The entity.</param>
         public void UpdateEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
             var existing = CreateQuery<TEntity>().FirstOrDefault(
                 x => x.RowKey == entity.RowKey && x.PartitionKey == entity.PartitionKey);
@@ -32,16 +54,31 @@ namespace ActiveRecordForAzure.Core {
             }
         }
 
+        /// <summary>
+        /// Deletes the entity.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="entity">The entity.</param>
         public void DeleteEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
             var list = GetList<TEntity>();
             list.Remove(entity);
         }
 
+        /// <summary>
+        /// Registers the setup.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="setup">The setup.</param>
         public void RegisterSetup<TEntity>(ActiveRecordTestSetup<TEntity> setup) where TEntity : new() {
             CreateEntityList<TEntity>();
             _setups[GetKey<TEntity>()] = setup;
         }
 
+        /// <summary>
+        /// Gets the setup.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <returns></returns>
         public ActiveRecordTestSetup<TEntity> GetSetup<TEntity>() where TEntity : new() {
             return _setups[GetKey<TEntity>()] as ActiveRecordTestSetup<TEntity>;
         }

@@ -7,6 +7,10 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core.Abstractions {
+
+    /// <summary>
+    /// Wraps the <see cref="TableServiceContext"/> for testability
+    /// </summary>
     public class TableServiceContextWrapper : ITableServiceContext {
         
         private readonly TableServiceContext _context;
