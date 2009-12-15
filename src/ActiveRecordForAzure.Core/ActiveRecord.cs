@@ -11,11 +11,11 @@ namespace ActiveRecordForAzure.Core {
         /// <summary>
         /// Finds the specified entity.
         /// </summary>
-        /// <param name="id">The id.</param>
+        /// <param name="rowKey">The id.</param>
         /// <returns></returns>
-        public static TEntity Find(string id) {
-            if (!string.IsNullOrEmpty(id))
-                return Find(x => x.RowKey == id).FirstOrDefault(); //TODO: PartitionKey
+        public static TEntity Find(string rowKey) {
+            if (!string.IsNullOrEmpty(rowKey))
+                return Find(x => (x.RowKey == rowKey && x.PartitionKey == "AR4A")).FirstOrDefault(); //TODO: remove hard code
             return null;
         }
 
@@ -23,12 +23,45 @@ namespace ActiveRecordForAzure.Core {
             return ActiveRecordContext.Current.CreateQuery<TEntity>().Where(predicate).ToList();
         }
 
-        public void Save() {
-            ActiveRecordContext.Current.AddEntity((TEntity)this);
-        }
-
         public static ActiveRecordTestSetup<TEntity> Setup(int numberOfEntities) {
             return new ActiveRecordTestSetup<TEntity>(numberOfEntities);
         }
+
+        public static void Delete(string rowKey) {
+            Delete(Find(rowKey));
+        }
+
+        public static void Delete(TEntity entity) {
+            ActiveRecordContext.Current.DeleteEntity(entity);
+        }
+
+        public void Delete() {
+            Delete((TEntity) this);
+        }
+
+        public void Save() {
+
+            if (IsNew()) {
+                SetRowKey();
+                SetPartitionKey();
+                ActiveRecordContext.Current.AddEntity((TEntity)this);
+            } else {
+                ActiveRecordContext.Current.UpdateEntity((TEntity)this);
+            }
+        }
+
+        public bool IsNew() {
+            return (string.IsNullOrEmpty(RowKey) || string.IsNullOrEmpty(PartitionKey));
+        }
+
+        private void SetPartitionKey() {
+                PartitionKey = "AR4A";  //TODO: remove hard code
+        }
+
+        private void SetRowKey() {
+                RowKey = string.Format("{0:10}", DateTime.MaxValue.Ticks - DateTime.Now.Ticks); //TODO: offer rowkey styles
+        }
+
+        
     }
 }

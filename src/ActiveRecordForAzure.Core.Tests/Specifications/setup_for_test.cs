@@ -74,5 +74,13 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications {
             Assert.Equal(setup, context.GetSetup<FakeEntity>());
 
         }
+
+        [Fact]
+        public void it_clears_the_setup_once_its_been_setup() {
+            var entity = FirstEntity(); //access the entities to trigger the loading
+            var context = ActiveRecordContext.Current as ActiveRecordTestContext;
+
+            Assert.Null(context.GetSetup<FakeEntity>());
+        }
     }
 }

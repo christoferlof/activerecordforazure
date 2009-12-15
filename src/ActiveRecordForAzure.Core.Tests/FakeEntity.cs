@@ -20,6 +20,5 @@ namespace ActiveRecordForAzure.Core.Tests {
         public double DoubleValue { get; set; }
 
         public byte[] ByteValue { get; set; }
-
     }
 }

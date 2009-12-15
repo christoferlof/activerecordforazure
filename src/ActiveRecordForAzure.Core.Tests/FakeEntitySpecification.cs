@@ -2,7 +2,7 @@
 using System;
 
 namespace ActiveRecordForAzure.Core.Tests {
-    public class FakeEntitySpecification {
+    public class FakeEntitySpecification : IDisposable {
 
         public FakeEntitySpecification() {
             ActiveRecordTestContext.EnsureTestContext();
@@ -16,6 +16,10 @@ namespace ActiveRecordForAzure.Core.Tests {
 
             return ActiveRecordContext.Current.CreateQuery<FakeEntity>();
 
+        }
+
+        public void Dispose() {
+            ActiveRecordContext.Destroy();
         }
     }
 }

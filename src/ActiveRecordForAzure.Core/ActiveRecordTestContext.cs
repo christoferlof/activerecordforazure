@@ -9,23 +9,32 @@ namespace ActiveRecordForAzure.Core {
 
         public static void EnsureTestContext() {
             ActiveRecordContextFactory.RegisterFactory(() => new ActiveRecordTestContext());
-
-            //ActiveRecordContext.Initialize(new ActiveRecordTestContext()); //force
         }
 
         private readonly Hashtable _entities = new Hashtable();
         private readonly Hashtable _setups = new Hashtable();
 
-        public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : new() {
-            
+        public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
             EnsureEntityList<TEntity>();
             return GetList<TEntity>().AsQueryable();
-
         }
 
-        public void AddEntity<TEntity>(TEntity entity) where TEntity : new() {
+        public void AddEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
             EnsureEntityList<TEntity>();
             AddEntityToList(entity);
+        }
+
+        public void UpdateEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
+            var existing = CreateQuery<TEntity>().FirstOrDefault(
+                x => x.RowKey == entity.RowKey && x.PartitionKey == entity.PartitionKey);
+            if (existing != null) {
+                existing = entity;
+            }
+        }
+
+        public void DeleteEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
+            var list = GetList<TEntity>();
+            list.Remove(entity);
         }
 
         public void RegisterSetup<TEntity>(ActiveRecordTestSetup<TEntity> setup) where TEntity : new() {
@@ -53,11 +62,15 @@ namespace ActiveRecordForAzure.Core {
 
             if (EntityHasSetups<TEntity>()) {
                 SetupEntity<TEntity>();
+                ClearSetups<TEntity>();
             }
         }
 
         private bool EntityHasSetups<TEntity>() {
             return _setups[GetKey<TEntity>()] != null;
+        }
+        private void ClearSetups<TEntity>() {
+            _setups[GetKey<TEntity>()] = null;
         }
 
         private bool ShouldCreateEntityList<TEntity>() {

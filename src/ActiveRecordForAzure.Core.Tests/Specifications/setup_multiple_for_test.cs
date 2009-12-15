@@ -35,7 +35,7 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications {
             Assert.Equal(3, Count<Customer>());
         }
 
-        private int Count<TEntity>() where TEntity : new() {
+        private int Count<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
             return ActiveRecordContext.Current.CreateQuery<TEntity>().Count();
         }
 

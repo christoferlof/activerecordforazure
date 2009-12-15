@@ -43,13 +43,23 @@ namespace ActiveRecordForAzure.Core {
             _dataContext = dataContext;
         }
 
-        public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : new() {
+        public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
             return _dataContext.CreateQuery<TEntity>(typeof(TEntity).GetTableName()); //AsTableServiceQuery()
         }
 
-        public void AddEntity<TEntity>(TEntity entity) where TEntity : new() {
+        public void AddEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
             _dataContext.AddObject(typeof(TEntity).GetTableName(), entity);
             _dataContext.SaveChanges();
-        } 
+        }
+
+        public void UpdateEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
+            _dataContext.UpdateObject(entity);
+            _dataContext.SaveChanges();
+        }
+
+        public void DeleteEntity<TEntity>(TEntity entity) where TEntity : ActiveRecord<TEntity>, new() {
+            _dataContext.DeleteObject(entity);
+            _dataContext.SaveChanges();
+        }
     }
 }

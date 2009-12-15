@@ -57,6 +57,8 @@
     <Compile Include="ActiveRecordEnvironment.cs" />
     <Compile Include="ActiveRecordExtensions.cs" />
     <Compile Include="ActiveRecordTestSetup.cs" />
+    <Compile Include="ActiveRecordTestSetupMember.cs" />
+    <Compile Include="ActiveRecordTestSetupMemberRegistration.cs" />
     <Compile Include="CloudTableProvider.cs" />
     <Compile Include="IActiveRecordContext.cs" />
     <Compile Include="Abstractions\ITableServiceContext.cs" />
