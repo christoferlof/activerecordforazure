@@ -16,11 +16,6 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications {
         }
 
         [Fact]
-        public void it_defaults_to_null() {
-            Assert.Null(TestableActiveRecordContext.TestableContext);
-        }
-
-        [Fact]
         public void it_initializes_on_first_access_to_current() {
             
             var context = new Mock<IActiveRecordContext>().Object;
@@ -39,14 +34,6 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications {
             var context2 = ActiveRecordContext.Current;
 
             Assert.Same(context1,context2);
-        }
-
-        private class TestableActiveRecordContext : ActiveRecordContext {
-            private TestableActiveRecordContext(ITableServiceContext dataContext) : base(dataContext) {}
-
-            public static IActiveRecordContext TestableContext {
-                get { return Context; }
-            }
         }
 
         public void Dispose() {

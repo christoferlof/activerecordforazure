@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ActiveRecordForAzure.Core {
-    public class ActiveRecordTestSetup<TEntity> {
+    public class ActiveRecordTestSetup<TEntity> where TEntity : new() {
 
         private readonly int _numberOfEntities;
         private readonly List<ActiveRecordTestSetupMember> _memberSetups = new List<ActiveRecordTestSetupMember>();
@@ -30,7 +30,6 @@ namespace ActiveRecordForAzure.Core {
         public ActiveRecordTestSetupMemberRegistration<TEntity, TMember> With<TMember>(Expression<Func<TEntity, TMember>> func) {
 
             var member = ((MemberExpression)func.Body).Member.Name;
-
             return new ActiveRecordTestSetupMemberRegistration<TEntity, TMember>(this,member);
         }
 
@@ -41,7 +40,7 @@ namespace ActiveRecordForAzure.Core {
         public object Value { get; set; }
     }
 
-    public class ActiveRecordTestSetupMemberRegistration<TEntity, TMember> {
+    public class ActiveRecordTestSetupMemberRegistration<TEntity, TMember> where TEntity : new() {
 
         private readonly ActiveRecordTestSetup<TEntity> _testSetup;
         private readonly string _memberName;

@@ -8,8 +8,9 @@ namespace ActiveRecordForAzure.Core {
     public class ActiveRecordTestContext : IActiveRecordContext  {
 
         public static void EnsureTestContext() {
-            //ActiveRecordContextFactory.RegisterFactory(() => new ActiveRecordTestContext());
-            ActiveRecordContext.Initialize(new ActiveRecordTestContext()); //force
+            ActiveRecordContextFactory.RegisterFactory(() => new ActiveRecordTestContext());
+
+            //ActiveRecordContext.Initialize(new ActiveRecordTestContext()); //force
         }
 
         private readonly Hashtable _entities = new Hashtable();
@@ -27,11 +28,12 @@ namespace ActiveRecordForAzure.Core {
             AddEntityToList(entity);
         }
 
-        public void RegisterSetup<TEntity>(ActiveRecordTestSetup<TEntity> setup) {
+        public void RegisterSetup<TEntity>(ActiveRecordTestSetup<TEntity> setup) where TEntity : new() {
+            CreateEntityList<TEntity>();
             _setups[GetKey<TEntity>()] = setup;
         }
 
-        public ActiveRecordTestSetup<TEntity> GetSetup<TEntity>(){
+        public ActiveRecordTestSetup<TEntity> GetSetup<TEntity>() where TEntity : new() {
             return _setups[GetKey<TEntity>()] as ActiveRecordTestSetup<TEntity>;
         }
 
@@ -45,12 +47,12 @@ namespace ActiveRecordForAzure.Core {
 
         private void EnsureEntityList<TEntity>() where TEntity : new() {
 
-            if(ShouldCreateEntityList<TEntity>()) {
+            if (ShouldCreateEntityList<TEntity>()) {
                 CreateEntityList<TEntity>();
+            }
 
-                if(EntityHasSetups<TEntity>()) {
-                    SetupEntity<TEntity>();
-                }
+            if (EntityHasSetups<TEntity>()) {
+                SetupEntity<TEntity>();
             }
         }
 
@@ -62,10 +64,10 @@ namespace ActiveRecordForAzure.Core {
             return (_entities[GetKey<TEntity>()] == null);
         }
 
-        private void CreateEntityList<TEntity>() {
+        private void CreateEntityList<TEntity>() where TEntity : new() {
             _entities[GetKey<TEntity>()] = new List<TEntity>();
         }
-
+         
         private string GetKey<TEntity>() {
             var type = typeof (TEntity);
             if (type.IsGenericType)
@@ -89,7 +91,8 @@ namespace ActiveRecordForAzure.Core {
             }
         }
 
-        private void SetupMember<TEntity>(int counter, ActiveRecordTestSetup<TEntity> setup, TEntity entity, PropertyInfo member) {
+        private void SetupMember<TEntity>(int counter, ActiveRecordTestSetup<TEntity> setup, TEntity entity, PropertyInfo member
+            ) where TEntity : new() {
             
             //registered returns
             var memberSetup = setup.Members.SingleOrDefault(m => m.Name == member.Name);
