@@ -8,6 +8,13 @@ namespace ActiveRecordForAzure.Core {
 
     public class ActiveRecord<TEntity> : TableServiceEntity where TEntity : ActiveRecord<TEntity>, new() {
 
+        public static IList<TEntity> All() {
+            var query = ActiveRecordContext.Current.CreateQuery<TEntity>();
+            if(query!=null)
+                return query.ToList();
+            return null;
+        }
+
         /// <summary>
         /// Finds the specified entity.
         /// </summary>

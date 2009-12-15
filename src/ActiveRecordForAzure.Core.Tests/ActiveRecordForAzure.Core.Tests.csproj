@@ -69,6 +69,8 @@
     <Compile Include="Specifications\initialize_test_context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specifications\find_single_entity.cs" />
+    <Compile Include="Specifications\retrieve_all_entities.cs" />
+    <Compile Include="Specifications\retrieve_all_from_cloud.cs" />
     <Compile Include="Specifications\save_existing_entity_to_cloud.cs" />
     <Compile Include="Specifications\save_single_entity.cs" />
     <Compile Include="Specifications\save_single_entity_to_cloud.cs" />
