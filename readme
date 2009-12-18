@@ -1,2 +1,1 @@
-ActiveRecord For Windows Azure Table Storage
-============================================
+ActiveRecord for Azure is a sample implementation of the ActiveRecord pattern for the Windows Azure Storage system.
