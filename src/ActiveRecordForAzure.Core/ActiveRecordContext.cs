@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Web;
 using ActiveRecordForAzure.Core.Abstractions;
 
 namespace ActiveRecordForAzure.Core {
@@ -10,7 +11,41 @@ namespace ActiveRecordForAzure.Core {
 
         #region statics
 
-        protected static IActiveRecordContext Context;
+        private static IActiveRecordContext _context;
+        private const string ContextKey = "ar4a-context";
+
+        protected static IActiveRecordContext Context {
+            get {
+                if (HttpContextExists())
+                    return HttpContext;
+                return _context;
+ 
+            }
+            set {
+                if (HttpContextExists())
+                    HttpContext = value;
+                else
+                    _context = value;
+            }
+        }
+
+        private static IActiveRecordContext HttpContext {
+            get{
+                if (HttpContextExists()) {
+                    return System.Web.HttpContext.Current.Items[ContextKey] as IActiveRecordContext;
+                }
+                return null;
+            }
+            set {
+                if (HttpContextExists())
+                    System.Web.HttpContext.Current.Items[ContextKey] = value;
+            }
+        }
+
+        private static bool HttpContextExists() {
+            return System.Web.HttpContext.Current != null;
+        }
+
 
         /// <summary>
         /// Gets the current context
@@ -56,7 +91,7 @@ namespace ActiveRecordForAzure.Core {
         #endregion
 
         private readonly ITableServiceContext _dataContext;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ActiveRecordContext"/> class.
         /// </summary>
