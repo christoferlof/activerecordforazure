@@ -5,6 +5,7 @@ using System.Data.Services.Client;
 using System.Net;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
+using System.Linq;
 
 namespace ActiveRecordForAzure.Core.Abstractions {
 

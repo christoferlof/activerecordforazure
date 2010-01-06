@@ -11,7 +11,13 @@ namespace ActiveRecordForAzure.Core {
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public class ActiveRecord<TEntity> : TableServiceEntity where TEntity : ActiveRecord<TEntity>, new() {
+        
+        private const string DefaultPartitionKey = "AR4A";
 
+        /// <summary>
+        /// Returns all entities
+        /// </summary>
+        /// <returns></returns>
         public static IList<TEntity> All() {
             var query = ActiveRecordContext.Current.CreateQuery<TEntity>();
             if(query!=null)
@@ -26,7 +32,7 @@ namespace ActiveRecordForAzure.Core {
         /// <returns></returns>
         public static TEntity Find(string rowKey) {
             if (!string.IsNullOrEmpty(rowKey))
-                return Find(x => (x.RowKey == rowKey && x.PartitionKey == "AR4A")).FirstOrDefault(); //TODO: remove hard code
+                return Find(x => (x.RowKey == rowKey && x.PartitionKey == DefaultPartitionKey)).FirstOrDefault();
             return null;
         }
 
@@ -97,11 +103,11 @@ namespace ActiveRecordForAzure.Core {
         }
 
         private void SetPartitionKey() {
-                PartitionKey = "AR4A";  //TODO: remove hard code
+                PartitionKey = DefaultPartitionKey;
         }
 
         private void SetRowKey() {
-                RowKey = string.Format("{0:10}", DateTime.MaxValue.Ticks - DateTime.Now.Ticks); //TODO: offer rowkey styles
+                RowKey = string.Format("{0:10}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks);
         }
 
         

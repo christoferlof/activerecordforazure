@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Web;
 using ActiveRecordForAzure.Core.Abstractions;
+using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core {
 
@@ -106,7 +107,10 @@ namespace ActiveRecordForAzure.Core {
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <returns></returns>
         public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
-            return _dataContext.CreateQuery<TEntity>(typeof(TEntity).GetTableName()); //AsTableServiceQuery()
+            var query = _dataContext.CreateQuery<TEntity>(typeof (TEntity).GetTableName());
+            if (query != null)
+                return query.AsTableServiceQuery();
+            return query;
         }
 
         /// <summary>
