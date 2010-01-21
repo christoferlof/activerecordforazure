@@ -64,6 +64,10 @@
     <Compile Include="IActiveRecordContext.cs" />
     <Compile Include="Abstractions\ITableServiceContext.cs" />
     <Compile Include="Abstractions\TableServiceContextWrapper.cs" />
+    <Compile Include="IPagedList.cs" />
+    <Compile Include="PagedList.cs" />
+    <Compile Include="PageToken.cs" />
+    <Compile Include="QueryableExtensions.cs" />
     <Compile Include="ITableProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ActiveRecordTestContext.cs" />

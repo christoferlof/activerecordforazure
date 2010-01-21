@@ -39,6 +39,12 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications {
         }
 
         [Fact]
+        public void it_initializes_specified_string_member_with_tokens2() {
+            Assert.IsAssignableFrom(typeof(FakeEntity), 
+                GetFakeEntities().Where(x => x.RowKey == "id-2").First());
+        }
+
+        [Fact]
         public void it_initializes_specified_byte_member() {
             Assert.Equal(new byte[2], FirstEntity().ByteValue);
         }

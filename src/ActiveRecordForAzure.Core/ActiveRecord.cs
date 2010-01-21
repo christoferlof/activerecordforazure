@@ -37,12 +37,32 @@ namespace ActiveRecordForAzure.Core {
         }
 
         /// <summary>
-        /// Finds and returns the entities matching the predicate
+        /// Finds and returns the entities matching the criteria
         /// </summary>
-        /// <param name="predicate">The predicate.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns></returns>
-        public static IList<TEntity> Find(Expression<Func<TEntity,bool>> predicate) {
-            return ActiveRecordContext.Current.CreateQuery<TEntity>().Where(predicate).ToList();
+        public static IList<TEntity> Find(Expression<Func<TEntity,bool>> criteria) {
+            return ActiveRecordContext.Current
+                .CreateQuery<TEntity>()
+                .Where(criteria)
+                .ToList();
+        }
+
+        public static IPagedList<TEntity> Paged(int pageSize) {
+            return ActiveRecordContext.Current
+                .CreateQuery<TEntity>()
+                .Take(pageSize)
+                .ToPagedList();
+        }
+
+        public static IList<TEntity> Paged(int pageSize, string pageToken) {
+            return ActiveRecordContext.Current
+                .CreateQuery<TEntity>()
+                .Skip(pageToken)
+                .Take(pageSize)
+                .ToList();
+
+            //execute..
         }
 
         /// <summary>

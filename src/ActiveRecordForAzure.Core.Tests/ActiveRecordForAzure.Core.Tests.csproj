@@ -69,6 +69,10 @@
     <Compile Include="Specifications\initialize_test_context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specifications\find_single_entity.cs" />
+    <Compile Include="Specifications\paged_list.cs" />
+    <Compile Include="Specifications\page_entities.cs" />
+    <Compile Include="Specifications\page_token_from_dictionary.cs" />
+    <Compile Include="Specifications\page_token_from_string.cs" />
     <Compile Include="Specifications\retrieve_all_entities.cs" />
     <Compile Include="Specifications\retrieve_all_from_cloud.cs" />
     <Compile Include="Specifications\save_existing_entity_to_cloud.cs" />

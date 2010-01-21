@@ -156,10 +156,12 @@ namespace ActiveRecordForAzure.Core {
         }
 
         private void SetupExplicitMember<TEntity>(PropertyInfo member, ActiveRecordTestSetupMember memberSetup, int counter, TEntity entity) {
+            
+            var memberValue = memberSetup.Value;
             if (member.PropertyType == typeof(string)) {
-                memberSetup.Value = string.Format(memberSetup.Value.ToString(), counter + 1);
+                memberValue = string.Format(memberSetup.Value.ToString(), counter + 1);
             }
-            member.SetValue(entity, memberSetup.Value, null);
+            member.SetValue(entity, memberValue, null);
         }
 
         private void SetupDefaultMember<TEntity>(PropertyInfo member, TEntity entity, int counter) {
