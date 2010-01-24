@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Services.Client;
+﻿using System.Data.Services.Client;
 using System.Linq;
-using System.Text;
+using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core {
 
@@ -29,6 +27,14 @@ namespace ActiveRecordForAzure.Core {
             return LinqSkip(self, token);
         }
 
+        /// <summary>
+        /// Determines whether the query instance is a cloud query (<see cref="DataServiceQuery{TElement}"/>) or not.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="self">extension method</param>
+        /// <returns>
+        /// 	<c>true</c> if the instance is a <see cref="DataServiceQuery{TElement}"/> otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsCloudQuery<TEntity>(this IQueryable<TEntity> self) {
             return (self is DataServiceQuery<TEntity>);
         }
@@ -50,6 +56,12 @@ namespace ActiveRecordForAzure.Core {
                 .SkipWhile(x => x.RowKey != pageToken.RowKey);
         }
 
+        /// <summary>
+        /// Executes the query and returns a paged list of entities
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="self">The self.</param>
+        /// <returns></returns>
         public static IPagedList<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> self) 
             where TEntity : ActiveRecord<TEntity>, new() {
             

@@ -48,6 +48,11 @@ namespace ActiveRecordForAzure.Core {
                 .ToList();
         }
 
+        /// <summary>
+        /// Returns the given number of entities
+        /// </summary>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <returns></returns>
         public static IPagedList<TEntity> Paged(int pageSize) {
             return ActiveRecordContext.Current
                 .CreateQuery<TEntity>()
@@ -55,6 +60,13 @@ namespace ActiveRecordForAzure.Core {
                 .ToPagedList();
         }
 
+
+        /// <summary>
+        /// Returns the given number of entities
+        /// </summary>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <param name="pageToken">The page token of the page to get</param>
+        /// <returns></returns>
         public static IPagedList<TEntity> Paged(int pageSize, string pageToken) {
             return ActiveRecordContext.Current
                 .CreateQuery<TEntity>()

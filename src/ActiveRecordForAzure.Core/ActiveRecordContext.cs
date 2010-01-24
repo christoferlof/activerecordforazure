@@ -108,8 +108,9 @@ namespace ActiveRecordForAzure.Core {
         /// <returns></returns>
         public IQueryable<TEntity> CreateQuery<TEntity>() where TEntity : ActiveRecord<TEntity>, new() {
             var query = _dataContext.CreateQuery<TEntity>(typeof (TEntity).GetTableName());
-            if (query != null)
-                return query.AsTableServiceQuery();
+            //TODO: move AsTableServiceQuery call
+            //if (query != null)
+            //    return query.AsTableServiceQuery(); 
             return query;
         }
 
