@@ -11,8 +11,6 @@ namespace ActiveRecordForAzure.Core {
     /// </summary>
     public static class QueryableExtensions {
         
-        
-
         /// <summary>
         /// Bypasses all entities prior the given Page Token 
         /// </summary>
@@ -52,22 +50,39 @@ namespace ActiveRecordForAzure.Core {
                 .SkipWhile(x => x.RowKey != pageToken.RowKey);
         }
 
-        public static IPagedList<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> self) where TEntity : ActiveRecord<TEntity>, new() {
-           
+        public static IPagedList<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> self) 
+            where TEntity : ActiveRecord<TEntity>, new() {
+            
             if (self.IsCloudQuery()) {
-                var result = (QueryOperationResponse<TEntity>) ((DataServiceQuery<TEntity>) self).Execute();
-                return new PagedList<TEntity>(result, new PageToken(result.Headers));
+                return CloudPagedList(self);
             }
-
-            //how to know about the next row and partition?
-
-            var list = self.ToList();
-            var last = list[list.Count - 1] as ActiveRecord<TEntity>;
-
-
-            return new PagedList<TEntity>(list, 
-                new PageToken(last.RowKey + "@" + last.PartitionKey));
+            return LinqPagedList(self);
         }
 
+        private static IPagedList<TEntity> LinqPagedList<TEntity>(IQueryable<TEntity> self) 
+            where TEntity : ActiveRecord<TEntity>, new() {
+            
+            var list = self.ToList();
+            var last = list[list.Count - 1] as ActiveRecord<TEntity>;
+            var lastToken = new PageToken(last.RowKey, last.PartitionKey);
+
+            var hasNextPage = ActiveRecordContext.Current
+                .CreateQuery<TEntity>()
+                .Skip(lastToken.Token)
+                .Take(2);
+
+            if(hasNextPage.Count() == 2) {
+                var next = hasNextPage.Single(x => x.RowKey != last.RowKey);
+                return new PagedList<TEntity>(list, 
+                    new PageToken(next.RowKey,next.PartitionKey));
+            } else {
+                return new PagedList<TEntity>(list,null);
+            }
+        }
+
+        private static IPagedList<TEntity> CloudPagedList<TEntity>(IQueryable<TEntity> self) {
+            var result = (QueryOperationResponse<TEntity>) ((DataServiceQuery<TEntity>) self).Execute();
+            return new PagedList<TEntity>(result, new PageToken(result.Headers));
+        }
     }
 }

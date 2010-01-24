@@ -45,6 +45,16 @@ namespace ActiveRecordForAzure.Core.Tests.Specifications
         }
 
         [Fact]
+        public void it_returns_no_page_token_if_theres_no_more_pages() {
+            
+            var pageToken = "6@partition"; //RowKey@PartitionKey
+
+            var entities = FakeEntity.Paged(5, pageToken);
+
+            Assert.Null(entities.NextPageToken);
+        }
+
+        [Fact]
         public void skip_throws_argument_exception_when_empty_token_is_provided() {
 
             var list = FakeEntity.All().AsQueryable();

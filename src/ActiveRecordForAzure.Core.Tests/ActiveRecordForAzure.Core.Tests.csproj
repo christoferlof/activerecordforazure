@@ -72,6 +72,7 @@
     <Compile Include="Specifications\paged_list.cs" />
     <Compile Include="Specifications\page_entities.cs" />
     <Compile Include="Specifications\page_token_from_dictionary.cs" />
+    <Compile Include="Specifications\page_token_from_row_and_partition.cs" />
     <Compile Include="Specifications\page_token_from_string.cs" />
     <Compile Include="Specifications\retrieve_all_entities.cs" />
     <Compile Include="Specifications\retrieve_all_from_cloud.cs" />

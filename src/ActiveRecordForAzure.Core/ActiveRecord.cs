@@ -55,14 +55,12 @@ namespace ActiveRecordForAzure.Core {
                 .ToPagedList();
         }
 
-        public static IList<TEntity> Paged(int pageSize, string pageToken) {
+        public static IPagedList<TEntity> Paged(int pageSize, string pageToken) {
             return ActiveRecordContext.Current
                 .CreateQuery<TEntity>()
                 .Skip(pageToken)
                 .Take(pageSize)
-                .ToList();
-
-            //execute..
+                .ToPagedList();
         }
 
         /// <summary>
