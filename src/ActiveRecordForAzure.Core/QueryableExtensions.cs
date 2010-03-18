@@ -1,6 +1,5 @@
 ﻿using System.Data.Services.Client;
 using System.Linq;
-using Microsoft.WindowsAzure.StorageClient;
 
 namespace ActiveRecordForAzure.Core {
 
